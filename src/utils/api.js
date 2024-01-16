@@ -8,7 +8,7 @@ const params = {
     }
 }
 
-console.log(params)
+  //console.log(params)
 
 export const fetchDataFromApi = async (url) => {
     try {

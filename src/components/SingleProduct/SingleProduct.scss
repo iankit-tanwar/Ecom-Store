@@ -131,6 +131,7 @@
                         font-size: 18px;
                         font-weight: 500;
                         display: flex;
+                       
                         &:nth-child(1){
                             margin-bottom: 20px;
                         }
@@ -138,7 +139,7 @@
                             font-size: 16px;
                             font-weight: 400;
                             cursor: pointer;
-
+                            padding-left: 5px;
                             color: #6b6b6b;
 
                         }
