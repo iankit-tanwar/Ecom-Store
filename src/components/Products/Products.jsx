@@ -1,8 +1,9 @@
+
 import Product from "./Product/Product";
 import "./Products.scss";
 
 const Products = ({ products, innerPage, headingText }) => {
-
+   
 
     return <div className="products-container">
         {!innerPage && <div className="sec-heading">
@@ -14,8 +15,11 @@ const Products = ({ products, innerPage, headingText }) => {
                 <Product
                     key={item.id}
                     id={item.id}
-                    data={item.attributes} />
+                    data={item.attributes} 
+                   
+                    />
             ))}
+            
 
         </div>
     </div>;

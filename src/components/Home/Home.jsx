@@ -12,28 +12,29 @@ const Home = () => {
 
     const { categories, setCategories, products, setProducts } = useContext(context);
 
+
+
     useEffect(() => {
         getCategories()
         getProducts()
 
-        
     }, []);
 
 
     const getCategories = () => {
         fetchDataFromApi("/api/categories?populate=*").then((res) => {
-          
+
             setCategories(res);
 
-           
+
         })
     }
     const getProducts = () => {
         fetchDataFromApi("/api/products?populate=*").then((res) => {
-           
+
             setProducts(res);
 
-          
+
         })
     }
 

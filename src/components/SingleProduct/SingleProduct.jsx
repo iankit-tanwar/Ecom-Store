@@ -1,21 +1,26 @@
 import "./SingleProduct.scss";
 
-import prod from '../../assets/products/earbuds-prod-1.webp'
+
 
 import { FaCartPlus, FaFacebook, FaInstagram, FaLinkedinIn, FaPinterest, FaTwitter } from 'react-icons/fa'
 import RelatedProducts from "./RelatedProducts/RelatedProducts";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { fetchDataFromApi } from "../../utils/api";
+import { context } from "../../utils/context";
+
 
 
 const SingleProduct = () => {
 
-    const { id } = useParams();
-    const [data , setData]= useState();
-    const bearerToken = process.env.REACT_APP_STRAPI_APP_KEY;
 
-    useEffect(()=>{
+    const { id } = useParams();
+    const [data, setData] = useState();
+    const bearerToken = process.env.REACT_APP_STRAPI_APP_KEY;
+    const [quantity, setQuantity] = useState(1);
+
+    const { handleAddToCart } = useContext(context)
+
+    useEffect(() => {
 
         fetch(`http://localhost:1337/api/products?populate=*&[filters][id]=${id}`, {
             method: 'GET',
@@ -31,7 +36,7 @@ const SingleProduct = () => {
                 return response.json();
             })
             .then(data => {
-               /*  console.log('Data:', data); */
+                // console.log('Data:', ); 
                 setData(data)
                 // Process the data as needed
             })
@@ -39,15 +44,33 @@ const SingleProduct = () => {
                 console.error('Fetch error:', error);
                 // Handle errors as needed
             });
-    },[])
+    }, [bearerToken, id])
 
-   
-    
+
+
+    const decrement = () => {
+        setQuantity((prevstate) => {
+            if (prevstate === 1) {
+                return 1
+            } return prevstate - 1
+
+
+        })
+
+
+    }
+
+    const increment = () => {
+
+        setQuantity((prevstate) => prevstate + 1)
+    }
+
+
     return <div className="single-product-main-content">
         <div className="layout">
             <div className="single-product-page">
                 <div className="left">
-               {/* {console.log(data.data[0].attributes.title)} */}
+                    {/* {console.log(data.data[0].attributes.title)} */}
                     <img src={process.env.REACT_APP_DEV_URL + data?.data?.[0].attributes?.img?.data?.[0].attributes?.url} alt="..pro-img" />
                 </div>
                 <div className="right">
@@ -57,11 +80,14 @@ const SingleProduct = () => {
 
                     <div className="cart-buttons">
                         <div className="quantity-buttons">
-                            <span>-</span>
-                            <span>5</span>
-                            <span>+</span>
+                            <span onClick={() => { decrement() }}>-</span>
+                            <span>{quantity}</span>
+                            <span onClick={() => { increment() }}>+</span>
                         </div>
-                        <button className="add-to-cart-button">
+                        <button className="add-to-cart-button" onClick={()=>{
+                            handleAddToCart(data.data[0],quantity  )
+                            console.log(data.data[0],quantity  )
+                        }}>
                             <FaCartPlus size={20} />
                             ADD TO CART
                         </button>
@@ -71,9 +97,9 @@ const SingleProduct = () => {
                     <div className="info-item">
                         <span className="text-bold">Category:
                             <span >
-                               
+
                                 {data?.data?.[0].attributes?.categories?.data?.[0].attributes?.title}
-                          
+
                             </span>
                         </span>
                         <span className="text-bold">Share:
@@ -87,7 +113,10 @@ const SingleProduct = () => {
                 </div>
             </div>
 
-            <RelatedProducts />
+            <RelatedProducts
+                productId={id}
+                categoryId={data?.data?.[0].attributes?.categories?.data?.[0].id}
+            />
         </div>
     </div>;
 };
