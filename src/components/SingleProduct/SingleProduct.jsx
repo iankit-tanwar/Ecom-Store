@@ -87,6 +87,7 @@ const SingleProduct = () => {
                         <button className="add-to-cart-button" onClick={()=>{
                             handleAddToCart(data.data[0],quantity  )
                             console.log(data.data[0],quantity  )
+                            setQuantity(1)
                         }}>
                             <FaCartPlus size={20} />
                             ADD TO CART
